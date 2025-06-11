@@ -3,3 +3,10 @@ node-v22.15.0-linux-x64/
 docker-compose-backup.yml
 *.log
 .env
+.docker/
+.npm/
+.cache/
+.idea/
+.vscode/
+.DS_Store
+*.log
