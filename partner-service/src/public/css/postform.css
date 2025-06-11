@@ -1,0 +1,131 @@
+.submitBtn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+#post_title:focus { 
+    outline:none !important;
+    outline-width: 0 !important;
+    box-shadow: none;
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+    border-color:#ced4da;
+}
+
+#universityName,
+#main_retailer,
+#partner,
+#post{
+  color:var(--bs-gray-900);
+  background-color: white;
+  border-color: white;
+}
+
+.btn:hover {
+ font-weight: bold; /* hover 시 폰트 굵기 변경 */
+}
+
+
+.category{
+ border: 1px solid;
+ border-color: #dee2e6;
+}
+
+#category-bar{
+ line-height: 60px;
+ color: rgba(0,0,0,0.1);
+}
+
+#map{
+    width: 500px;
+    height: 500px;
+}
+
+
+/* 제휴 가게 등록 파트 */
+#sotreUpload{
+    display: none;
+    margin-top: 10px;
+    font-size: 10px;
+}
+
+.inputForm{
+    border-radius: 5px;
+    margin-bottom: 50px;
+}
+
+.inputBox{
+    width: 80px;
+    height: 50px;
+    margin: 0 auto 0;
+    display: inline;
+}
+
+.inputBoxS{
+    width: 80px;
+    height: 40px;
+    display: inline-block;
+    margin: 0 auto;
+    /* border: 1px solid #FFD400; */
+    border-radius: 5px;
+    outline: none;
+}
+
+.inputBtn{
+    width: 60px;
+    height: 40px;
+    margin-left: 5px;
+    background-color: #FFD400;
+    border: none;
+    /* border-radius: 5px; */
+    outline: none;
+}
+
+#uploadBtn{
+    width: 100px;
+    height: 40px;
+    margin-left: 5px;
+    background-color: #FFD400;
+    border: none;
+    border-radius: 5px;
+    outline: none;
+}
+
+#addrInfo{
+    font-size: 12px;
+}
+.form-select {
+    font-size: 1rem !important;
+    height: 40px;
+}
+
+.form-control {
+    font-size: 1rem !important;
+    height: 40px;
+}
+
+#store_location::placeholder{
+  font-size: 13px;
+}
+
+.btn{
+  font-size: 15px;
+}
+#serchBtnAddr{
+  display: flex;
+  justify-content: center; 
+  align-items: center;   
+}
+
+#uploadBtnBox{
+  display: flex;
+  justify-content: center;
+}
+
+#uploadBtn{
+  display: flex;
+  justify-content: center; 
+  align-items: center;     
+}

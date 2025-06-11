@@ -1,0 +1,12 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhistcnt =7
+let g:netrw_dirhist_7='/home/cloud_uniunity25/start-service/src/models'
+let g:netrw_dirhist_6='/home/cloud_uniunity25/user-service/src/public/js'
+let g:netrw_dirhist_5='/home/cloud_uniunity25/start-service/src/public/js'
+let g:netrw_dirhist_4='/home/cloud_uniunity25'
+let g:netrw_dirhist_3='/home/cloud_uniunity25/post-service'
+let g:netrw_dirhist_2='/home/cloud_uniunity25/start-service/src/public/js'
+let g:netrw_dirhist_1='/home/cloud_uniunity25/start-service/src/models'
+let g:netrw_dirhist_0='/home/cloud_uniunity25/post-reaction-service/src'
+let g:netrw_dirhist_9='/home/cloud_uniunity25/post-reaction-service/src/controllers'
+let g:netrw_dirhist_8='/home/cloud_uniunity25/start-service/src/models'

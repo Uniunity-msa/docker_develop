@@ -1,0 +1,161 @@
+version: '3'
+services:
+  rabbit:
+    image: rabbitmq:3.8.5-management
+    container_name: rabbit
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    expose:
+      - "5672"
+      - "15672"
+    restart: always
+
+  partner-service-db:
+    image: mysql:8.0
+    container_name: partner-service-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: ${PARTNER_SERVICE_DB_NAME}
+      MYSQL_USER: ${PARTNER_SERVICE_DB_USER}
+      MYSQL_PASSWORD: ${PARTNER_SERVICE_DB_PASSWORD}
+    volumes:
+      - ./sql/partner-init.sql:/docker-entrypoint-initdb.d/partner-init.sql
+    ports:
+      - "3308:3306"
+
+  partner-service:
+    build:
+      context: ./partner-service
+    container_name: partner-service
+    restart: "no"
+    ports:
+      - "3003:3003"
+    environment:
+      DB_HOST: ${PARTNER_SERVICE_DB_HOST}
+      DB_NAME: ${PARTNER_SERVICE_DB_NAME}
+      DB_USER: ${PARTNER_SERVICE_DB_USER}
+      DB_PASSWORD: ${PARTNER_SERVICE_DB_PASSWORD}
+      DB_PORT: ${PARTNER_SERVICE_DB_PORT}
+      RABBIT: amqp://guest:guest@rabbit:5672
+    entrypoint: ["bash", "./wait-for.sh", "partner-service-db", "3306", "npm", "start"]
+    depends_on:
+      - partner-service-db
+      - rabbit
+
+  user-service-db:
+    image: mysql:8.0
+    container_name: user-service-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: ${USER_SERVICE_DB_NAME}
+      MYSQL_USER: ${USER_SERVICE_DB_USER}
+      MYSQL_PASSWORD: ${USER_SERVICE_DB_PASSWORD}
+    volumes:
+      - ./sql/user-init.sql:/docker-entrypoint-initdb.d/user-init.sql
+    ports:
+      - "3307:3306"
+
+  user-service:
+    build:
+      context: ./user-service
+    container_name: user-service
+    restart: "no"
+    ports:
+      - "3004:3004"
+    environment:
+      DB_HOST: ${USER_SERVICE_DB_HOST}
+      DB_NAME: ${USER_SERVICE_DB_NAME}
+      DB_USER: ${USER_SERVICE_DB_USER}
+      DB_PASSWORD: ${USER_SERVICE_DB_PASSWORD}
+      DB_PORT: ${USER_SERVICE_DB_PORT}
+      RABBIT: amqp://guest:guest@rabbit:5672
+    entrypoint: ["bash", "./wait-for.sh", "user-service-db", "3306", "npm", "start"]
+    depends_on:
+      - user-service-db
+      - rabbit
+
+  start-service:
+    build:
+      context: ./start-service
+    container_name: start-service
+    restart: "no"
+    ports:
+      - "3001:3001"
+    environment:
+      RABBIT: amqp://guest:guest@rabbit:5672
+    command: ["npm", "start"]
+    depends_on:
+      - rabbit
+
+  post-service-db:
+    image: mysql:8.0
+    container_name: post-service-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: ${POST_SERVICE_DB_NAME}
+      MYSQL_USER: ${POST_SERVICE_DB_USER}
+      MYSQL_PASSWORD: ${POST_SERVICE_DB_PASSWORD}
+    volumes:
+      - ./sql/post-init.sql:/docker-entrypoint-initdb.d/post-init.sql
+    ports:
+      - "3311:3306"
+    command:
+      --character-set-server=utf8mb4
+      --collation-server=utf8mb4_unicode_ci
+      --init-connect='SET NAMES utf8mb4'
+
+  post-service:
+    build:
+      context: ./post-service
+    container_name: post-service
+    ports:
+      - "3000:3000"
+    entrypoint: ["bash", "./wait-for.sh", "post-service-db", "3306", "npm", "start"]
+    depends_on:
+      - post-service-db
+      - rabbit 
+    environment:
+      DB_HOST: ${POST_SERVICE_DB_HOST}
+      DB_NAME: ${POST_SERVICE_DB_NAME}
+      DB_USER: ${POST_SERVICE_DB_USER}
+      DB_PASSWORD: ${POST_SERVICE_DB_PASSWORD}
+      DB_PORT: ${POST_SERVICE_DB_PORT}
+      RABBIT: amqp://guest:guest@rabbit:5672
+
+  post-reaction-service-db:
+    image: mysql:8.0
+    container_name: post-reaction-service-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: ${POST_REACTION_SERVICE_DB_NAME}
+      MYSQL_USER: ${POST_REACTION_SERVICE_DB_USER}
+      MYSQL_PASSWORD: ${POST_REACTION_SERVICE_DB_PASSWORD}
+    volumes:
+      - ./sql/post-reaction-init.sql:/docker-entrypoint-initdb.d/post-reaction-init.sql
+    ports:
+      - "3310:3306"
+
+  post-reaction-service:
+    build:
+      context: ./post-reaction-service
+    container_name: post-reaction-service
+    restart: "no"
+    ports:
+      - "3002:3002"
+    environment:
+      DB_HOST: ${POST_REACTION_SERVICE_DB_HOST}
+      DB_NAME: ${POST_REACTION_SERVICE_DB_NAME}
+      DB_USER: ${POST_REACTION_SERVICE_DB_USER}
+      DB_PASSWORD: ${POST_REACTION_SERVICE_DB_PASSWORD}
+      DB_PORT: ${POST_REACTION_SERVICE_DB_PORT}
+      RABBIT: amqp://guest:guest@rabbit:5672
+    entrypoint: ["bash", "./wait-for.sh", "post-reaction-service-db", "3306", "npm", "start"]
+    depends_on:
+      - post-reaction-service-db
+      - rabbit
+
